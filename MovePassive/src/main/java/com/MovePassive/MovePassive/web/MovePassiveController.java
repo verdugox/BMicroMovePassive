@@ -2,6 +2,7 @@ package com.MovePassive.MovePassive.web;
 
 
 import com.MovePassive.MovePassive.entity.MovePassive;
+import com.MovePassive.MovePassive.entity.ProductPassive;
 import com.MovePassive.MovePassive.service.MovePassiveService;
 import com.MovePassive.MovePassive.web.mapper.MovePassiveMapper;
 import com.MovePassive.MovePassive.web.model.MovePassiveModel;
@@ -70,6 +71,16 @@ public class MovePassiveController {
         log.info("updateById executed {}:{}", id, request);
         return movePassiveService.update(id, movePassiveMapper.modelToEntity(request))
                 .map(movePassive -> movePassiveMapper.entityToModel(movePassive))
+                .flatMap(p -> Mono.just(ResponseEntity.created(URI.create(String.format("http://%s:%s/%s/%s", name, port, "movePassive", p.getId())))
+                        .body(p)))
+                .defaultIfEmpty(ResponseEntity.badRequest().build());
+    }
+
+
+    @PutMapping("/updateProductPassiveWebClient/{id}")
+    public Mono<ResponseEntity<ProductPassive>> updateProductPassiveWebClient(@PathVariable String id, @Valid @RequestBody ProductPassive request){
+        log.info("updateProductPassiveWebClient executed {}:{}", id, request);
+        return  movePassiveService.updateProductPassiveWebClient(request)
                 .flatMap(p -> Mono.just(ResponseEntity.created(URI.create(String.format("http://%s:%s/%s/%s", name, port, "movePassive", p.getId())))
                         .body(p)))
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
