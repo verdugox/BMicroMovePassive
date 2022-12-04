@@ -81,7 +81,11 @@ public class MovePassiveService {
                         productPassive1.setAvailableAmount(productPassive1.getAvailableAmount() + movePassive.getAmount());
                     }
                     else{
-                        productPassive1.setAvailableAmount(productPassive1.getAvailableAmount() - movePassive.getAmount());
+                        if(productPassive1.getAvailableAmount() >= movePassive.getAmount()){
+                            productPassive1.setAvailableAmount(productPassive1.getAvailableAmount() - movePassive.getAmount());
+                        }else{
+                            return Mono.error(new Exception("No puede realizar un retiro, ya que el monto del producto activo disponible es menor al monto que desea retirar - " + productPassive1.getAvailableAmount()));
+                        }
                     }
                     log.debug("productpassive" +productPassive1.getId());
                     updateProductPassiveById(productPassive1).subscribe();
