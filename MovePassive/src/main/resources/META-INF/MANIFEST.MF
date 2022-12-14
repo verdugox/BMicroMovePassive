@@ -1,0 +1,1 @@
+Main-Class: com.MovePassive.MovePassive.MovePassiveApplication
