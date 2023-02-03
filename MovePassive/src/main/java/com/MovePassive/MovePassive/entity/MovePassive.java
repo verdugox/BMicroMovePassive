@@ -22,7 +22,6 @@ public class MovePassive {
     @Id
     private String id;
     @NotEmpty
-    @Indexed(unique = true)
     @Size(min = 0, max = 20)
     @Column(nullable = false, length = 20)
     private String identityAccount;
